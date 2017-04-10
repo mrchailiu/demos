@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	
+	<filter>
+		<filter-name>encoding</filter-name>
+		<filter-class>com.softeem.filter.EncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoder</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encoding</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>QueryController</servlet-name>
+    <servlet-class>com.softeem.controller.QueryLocale</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>QueryOnline</servlet-name>
+    <servlet-class>com.softeem.controller.QueryOnline</servlet-class>
+  </servlet>
+  <servlet>
+    <description>This is the description of my J2EE component</description>
+    <display-name>This is the display name of my J2EE component</display-name>
+    <servlet-name>Query2</servlet-name>
+    <servlet-class>com.softeem.controller.QueryMobile</servlet-class>
+  </servlet>
+
+
+  <servlet-mapping>
+    <servlet-name>Query2</servlet-name>
+    <url-pattern>/query2</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>QueryController</servlet-name>
+    <url-pattern>/query</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>QueryOnline</servlet-name>
+    <url-pattern>/queryOnline</url-pattern>
+  </servlet-mapping>
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
+</web-app>

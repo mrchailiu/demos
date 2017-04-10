@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="EasyWeather"
+  id="myeclipse.1477961423410"
+  context-root="/myweather"
+  j2ee-spec="5.0"
+  archive="EasyWeather.war">
+  <attributes>
+    <attribute name="webrootdir" value="/WebRoot" />
+  </attributes>
+</project-module>
+

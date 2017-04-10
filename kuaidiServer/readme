@@ -1,0 +1,29 @@
+CS/BS
+Client/Server
+Browser/Server
+示例单号：
+	3933930311784  韵达快递 
+	778794234699 中通快递 
+	881443775034378914 圆通快递
+	VB26587200065 京东快递
+	 
+	403228366341 申通快递
+	
+
+请求地址
+离线版：
+http://128.0.89.141:8888/kuaidi/query?postid=3307236574301
+输入：快递单号
+输出：物流数据json格式
+
+在线版
+http://127.0.44.141:8888/kuaidi/queryOnline?type=shentong&postid=3307236574301
+输入:
+	1.快递商代号	
+	2.快递单号
+输出：物流数据json格式
+
+核心类
+QueryExpress
+
+http://www.kuaidi100.com/query?type=yuantong&postid=3307236574301

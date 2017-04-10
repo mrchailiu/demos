@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8">
+		<title>武汉软帝--快递单号查询</title>
+		<script type="text/javascript" src="js/jquery.js"></script>
+		<style type="text/css">
+.main {
+	width: 900px;
+	margin: auto;
+}
+
+.tablemain {
+	width: 700px;
+	margin: auto;
+	font-size: 12px;
+	font-family: "微软雅黑";
+	border: 1px solid #448EF3;
+	margin-top: 30px;
+}
+
+.tablemain tr {
+	height: 40px;
+}
+
+.tablemain tr th {
+	font-size: 14px;
+}
+
+.tablemain tr:hover {
+	color: gray;
+}
+
+.tablemain tr td,.tablemain tr th {
+	border-bottom: 1px solid lightgray;
+}
+input{
+outline: none;
+cursor: pointer;
+}
+#postid {
+	font-size: 26px;
+	border: 1px solid #448EF3;
+	width: 340px;
+	height:31px;
+	padding:3px;
+}
+#expCode{
+	font-size: 20px;
+	border: 1px solid #448EF3;
+	width: 220px;
+	padding:3px;
+}
+
+#btnQuery {
+	border: none;
+	font-size: 26px;
+	width: 128px;
+	height: 38px;
+	border: 1px solid #448EF3;
+	background: url("images/untitled.png") 12px -553px no-repeat #448ef3;
+	font-family: "宋体";
+	color: white;
+	text-indent: 25px;
+	cursor: pointer;
+    margin-top: 15px;
+}
+
+#btnQuery:hover {
+	background-color: #76B5DF;
+}
+
+.title {
+	text-align: center;
+	font-family: "华文中宋";
+	font-size: 28px;
+	font-weight: bold;
+	vertical-align: middle;
+	height: 42px;
+	line-height: 42px;
+}
+
+img.logo {
+	position: absolute;
+	top: 12px;
+}
+
+span {
+	margin-left: 38px;
+}
+
+.query {
+	width: 100%;
+	margin: auto;
+	text-align: center;
+}
+
+.td_center {
+	background: url("images/untitled1.png") 0px center no-repeat #fbfbfb;
+	width: 50px;
+}
+
+.td_center_content {
+	background: url("images/untitled1.png") -50px center no-repeat #fbfbfb;
+	width: 50px;
+}
+
+.td_center_last {
+	width: 50px;
+	background: url("images/untitled1.png") -150px center no-repeat #fbfbfb
+}
+.type{
+	text-align: center;
+	padding:5px;
+}
+#expCode{
+	display: none;
+}
+</style>
+	</head>
+
+	<body>
+		<div class="main">
+			<div class="title">
+				<img class="logo" src="images/logo.png" width="32px" height="32px"></img>
+				<span>武汉软帝快递查询系统</span>
+			</div>
+			<div class="type">
+				<input type="radio" name="type" value="off" checked="checked">离线版
+				<input type="radio" name="type" value="on">联网版
+				<select id="expCode">
+				</select>
+			</div>
+			<div class="query">
+				<input type="text" name="postid" id="postid"><input type="submit" id="btnQuery" value="查询">
+			</div>
+			<div id="data">
+				<table class="tablemain" cellspacing="0" id="tb1">
+					<tr class="thead">
+						<th>
+							时间
+						</th>
+						<th width="30px"></th>
+						<th>
+							地点
+						</th>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</body>
+	<script>
+	$(function(){
+		//加载快递数据
+		initData();
+		//单选按钮事件处理
+		$('input[type=radio]').change(function(){
+			if($(this).val() == 'on'){
+				$("#expCode").show();
+			}else{
+				$("#expCode").hide();
+			}
+		});
+		//按钮点击
+		$('#btnQuery').click(function(){
+			var postid = $("#postid").val();
+			if(postid==null||postid==""){
+				alert("请输入要查询的单号");
+				return;
+			}
+			//获取查询方式(在线or离线)
+			var checked = $(":checked").val();
+			
+			var url="query";
+			var param = "postid="+postid+"&type="+$('#expCode').val();
+			if(checked == "on"){
+				url = "queryOnline";
+			}
+			//查询物流数据
+			$.post(url,param,function(data){
+				//显示数据前，移出表格中数据
+				$("#tb1 tr:gt(0)").remove();
+				if(data != "error" && data != "null"){
+					var json = eval("("+data+")");
+					var xhtml="";
+					for(var i=json.length-1;i>=0;i--){
+						if(i==0){
+							xhtml+="<tr><td align='center'>"+json[i].time+"</td><td class='td_center_last'></td><td>"+json[i].context+"</td></tr>";
+						}
+						else if(i==json.length-1){
+							xhtml+="<tr><td align='center'>"+json[i].time+"</td><td class='td_center'></td><td>"+json[i].context+"</td></tr>";
+						}
+						else{
+							xhtml+="<tr><td align='center'>"+json[i].time+"</td><td class='td_center_content'></td><td>"+json[i].context+"</td></tr>";
+						}
+					}
+					$("#data").css('display','none');//隐藏列表
+					$("#tb1 tr:last").after(xhtml);//添加行数据到列表
+					$("#data").slideDown("slow");//设置下拉特效
+				}else{
+					$("#tb1 tr:last").after("<tr><th colspan='3' style='color:#ff0000'>单号错误</th></tr>");
+				}
+				
+			});
+		});	
+	})
+	
+	function initData(){
+		$.get('queryOnline',function(data){
+			var json = eval("("+data+")");
+			$("#expCode")[0].options.length=json.length;
+			$.each(json,function(i,d){
+				var option = new Option();
+				option.text = d.name;
+				option.value = d.code;
+				$('#expCode')[0].options[i]=option;
+			});
+		});
+	}
+</script>
+</html>
